@@ -6,6 +6,8 @@ This repository holds the clickable prototype of Khoj.
 
 **Live site:** https://khoj-for-dus-pattay.vercel.app
 
+The site deploys automatically on Vercel whenever `main` changes.
+
 ## What is here
 
 | Path | What it is |
