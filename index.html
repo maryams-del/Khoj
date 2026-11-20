@@ -216,7 +216,7 @@ function fitHome() {
 }
 function fitPage(el) {
   var r = el.firstElementChild; if (!r) return;
-  if ((r.getAttribute('style') || '').indexOf('height: 917px') < 0) return;
+  if (!r.hasAttribute('data-fit')) { if ((r.getAttribute('style') || '').indexOf('height: 917px') < 0) return; r.setAttribute('data-fit', '1'); }
   r.style.zoom = 1; r.style.setProperty('height', '100%', 'important');
   var H = el.clientHeight, z = Math.min(1, Math.max(.7, H / 800));
   if (z < 1) { r.style.zoom = z; r.style.setProperty('height', (H / z) + 'px', 'important'); }
