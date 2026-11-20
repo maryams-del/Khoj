@@ -6,6 +6,8 @@
 <title>Khoj · Understanding ADHD, made easy</title>
 <!--ICONS-->
 <script>var PHONE = window.innerWidth < 900; if (PHONE) document.querySelector('meta[name=viewport]').setAttribute('content', 'width=412');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&family=Fraunces:opsz,wght@9..144,500&display=swap">
 <style>
 :root{--bg:#FBF5F5;--ink:#33202A;--mut:#6A5560;--pri:#9C4560;--tint:#F6DFE5;--sky:#DCEAF7;--skyink:#1F4468;--line:#EBD6DC;--edge:#E3B9C6}
@@ -72,7 +74,7 @@ body.phone{overflow:hidden}
 #trail a span.lv{flex:none;display:inline-flex;gap:3px}
 #trail a span.lv i{width:13px;height:10px;background:var(--line)}
 .leafin{animation:leafin .5s cubic-bezier(.2,.8,.2,1) both}
-#guestbar{position:absolute;right:24px;bottom:24px;display:none;flex-direction:column;align-items:flex-start;gap:10px;width:230px;padding:14px 16px;border-radius:22px;line-height:19px;background:var(--sky);color:var(--skyink);font-size:13px;font-weight:700;z-index:3}
+#guestbar{position:relative;flex:none;display:none;flex-direction:row;align-items:center;gap:12px;max-width:94%;padding:8px 10px 8px 18px;border-radius:22px;line-height:19px;background:var(--sky);color:var(--skyink);font-size:13px;font-weight:700;z-index:3}
 #guestbar button{height:32px;padding:0 14px;border:0;border-radius:16px;background:#fff;color:var(--skyink);font-size:13px;font-weight:700}
 #topbar{position:absolute;left:24px;right:24px;top:20px;display:none;align-items:center;gap:14px;z-index:2}
 #topbar nav{display:flex;gap:4px;padding:6px;border-radius:32px;background:#fff}
@@ -84,8 +86,15 @@ body.tucked #left{transform:translateX(-430px)}
 body.tucked #divider,body.tucked #tuck{opacity:0;pointer-events:none}
 body.tucked #pane{left:0}
 body.tucked #topbar,body.tucked #ask{display:flex}
-body.tucked #guestbar{bottom:104px}
-body.tucked #pane{top:84px}
+#page nav[aria-label="Main"],#page div:has(>span[title^="Swipe to tuck"]){display:none!important}
+.sw>*{animation:swin .28s ease both}
+@keyframes swin{from{opacity:0}to{opacity:1}}
+#modal.on{animation:modalin .2s ease both}#modal.on .box{animation:boxin .25s cubic-bezier(.2,.8,.2,1) both}
+@keyframes modalin{from{opacity:0}to{opacity:1}}
+@keyframes boxin{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+.nudge{animation:nudge .45s ease}
+@keyframes nudge{0%,100%{transform:none}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+body.tucked #pane{top:84px;bottom:84px}
 @keyframes launch{0%{opacity:0;transform:translateY(170px) scale(1.7)}22%,52%{opacity:1;transform:translateY(170px) scale(1.7)}100%{opacity:1;transform:none}}
 @keyframes fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes panein{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
@@ -99,7 +108,7 @@ body.tucked #pane{top:84px}
   <span class="glow" style="left:12%;top:12%;width:520px;height:520px;background:#EDB9C9;filter:blur(80px)"></span>
   <span class="glow" style="right:10%;top:34%;width:480px;height:480px;background:#B3D0EE;filter:blur(80px)"></span>
   <span class="glow" style="left:43%;top:4%;width:240px;height:240px;background:#F6DFE5;filter:blur(40px)"></span>
-  <button class="pill ur" lang="ur" id="w-ur" style="position:absolute;right:32px;top:28px" onclick="setLang(lang === 'ur' ? 'en' : 'ur')">اردو</button>
+  <button class="pill ur" lang="ur" id="w-ur" style="position:absolute;right:32px;top:28px" onclick="toggleLang()">اردو</button>
   <div class="card"><div class="glass"></div>
     <div class="in">
       <span class="mark ser">Khoj</span>
@@ -149,12 +158,12 @@ body.tucked #pane{top:84px}
     <span style="flex-grow:1"></span>
     <nav aria-label="Main"><button class="on" onclick="tuck(false);closePane()">Home</button><button onclick="openPage('Game',true)">Game</button><button onclick="openPage('Children',true)">Reports</button></nav>
     <span style="flex-grow:1"></span>
-    <button class="pill ur" lang="ur" id="t-ur" onclick="setLang(lang === 'ur' ? 'en' : 'ur')">اردو</button>
+    <button class="pill ur" lang="ur" id="t-ur" onclick="toggleLang()">اردو</button>
   </header>
-  <div id="guestbar"><button aria-label="Dismiss" onclick="document.getElementById('guestbar').style.display='none'" style="position:absolute;right:8px;top:8px;width:30px;height:30px;padding:0;border-radius:15px;font-size:14px">✕</button><span style="padding-right:28px">You’re a guest. The children and reports here are sample data.</span><button onclick="leave()">Sign up</button></div>
   <main id="pane">
     <nav id="trail" aria-label="Pages you came from"></nav>
     <div id="pagewrap"><div id="page"></div></div>
+    <div id="guestbar"><span>You’re a guest. The children and reports here are sample data.</span><button onclick="leave()">Sign up</button><button aria-label="Dismiss" onclick="hideGuest()" style="width:32px;padding:0">✕</button></div>
   </main>
   <button id="ask" onclick="openPage('VoiceMenu',true)"><span class="mic">&#9679;</span><span><span style="display:block;font-size:15px;line-height:20px;font-weight:700">Ask Khoj</span><span style="display:block;font-size:12px;line-height:17px;color:var(--mut)">Click, and Khoj will guide you by voice</span></span></button>
 </div>
@@ -165,6 +174,7 @@ var WIDEPATH = /*WIDEPATH*/'';
 var $ = function (id) { return document.getElementById(id); };
 var guest = false, stack = [], HOME = ['Home', 'HomeUrdu', 'HomeCollapsed'];
 var S = {}, lang = 'en', toastT;
+var NOSW = { Main: 1, Role: 1, Register: 1, Login: 1, WhatIs: 1, WhatIs2: 1, WhatIs4: 1, HowWorks: 1 };
 var FADE = { Main: 1, Home: 1, HomeUrdu: 1, Path: 1, Signs: 1, Children: 1, Game: 1 };
 function toast(t) { var e = $('toast'); e.textContent = t; e.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function () { e.classList.remove('on'); }, 2200); }
 var UR = /*UR*/{};
@@ -184,6 +194,7 @@ function shellLang() {
   ['welcome', 'guestbar', 'topbar', 'ask', 'modal'].forEach(function (id) { var e = $(id); tr(e, on); if (on) { e.setAttribute('data-ur', '1'); e.setAttribute('dir', 'rtl'); } else { e.removeAttribute('data-ur'); e.removeAttribute('dir'); } });
   ['w-ur', 't-ur'].forEach(function (id) { var b = $(id); b.textContent = on ? 'English' : 'اردو'; b._en = undefined; b.style.fontFamily = on ? "'Plus Jakarta Sans',system-ui,sans-serif" : "'Noto Nastaliq Urdu',serif"; b.style.lineHeight = on ? '1.2' : ''; });
 }
+function toggleLang() { setLang(window.lang === 'ur' ? 'en' : 'ur'); }
 function setLang(l) {
   if (l === lang) return; lang = l; shellLang();
   ['home', 'phone', 'page'].forEach(function (id) { var e = $(id), n = e.getAttribute('data-name'); if (!n) return; if (n === 'HomeUrdu') n = 'Home'; var st = e.scrollTop; render(e, n); e.scrollTop = st; });
@@ -196,12 +207,15 @@ function fitHome() {
 }
 function fitPage(el) {
   var r = el.firstElementChild; if (!r) return;
-  if ((r.getAttribute('style') || '').indexOf('height: 917px') < 0) return;
+  if (!r.hasAttribute('data-fit')) { if ((r.getAttribute('style') || '').indexOf('height: 917px') < 0) return; r.setAttribute('data-fit', '1'); }
   r.style.zoom = 1; r.style.setProperty('height', '100%', 'important');
   var H = el.clientHeight, z = Math.min(1, Math.max(.7, H / 800));
   if (z < 1) { r.style.zoom = z; r.style.setProperty('height', (H / z) + 'px', 'important'); }
 }
-window.addEventListener('resize', function () { fitHome(); fitPage($('page')); fitPage($('phone')); });
+function fitRoad(el) { var r = el.querySelector('[style*="width: 760px"]'); if (!r) return; r.style.zoom = 1; var w = r.parentElement.clientWidth - 8; r.style.zoom = w < 760 ? w / 760 : 1; }
+var autoTuck = false;
+function fitWidth() { if (PHONE || $('app').style.display !== 'block') return; var narrow = window.innerWidth < 900; if (narrow && !document.body.classList.contains('tucked')) { autoTuck = true; tuck(true); } else if (!narrow && autoTuck) { autoTuck = false; tuck(false); } }
+window.addEventListener('resize', function () { fitWidth(); fitHome(); fitPage($('page')); fitPage($('phone')); fitRoad($('page')); });
 var askMin = false;
 function grips(root) { return root.querySelectorAll('a[href^="HomeCollapsed"],span[title^="Swipe to tuck"]'); }
 function applyAsk() { ['home', 'page', 'phone'].forEach(function (id) { [].forEach.call(grips($(id)), function (g) { g.classList.add('grip'); g.setAttribute('role', 'button'); g.setAttribute('aria-label', askMin ? 'Show the Ask Khoj bar' : 'Tuck Ask Khoj away'); g.removeAttribute('aria-hidden'); g.parentElement.classList.toggle('askmin', askMin); }); }); }
@@ -209,14 +223,23 @@ var tx = null;
 document.addEventListener('touchstart', function (ev) { var b = ev.target.closest && ev.target.closest('.grip, .askmin, div'); tx = null; [].forEach.call(document.querySelectorAll('.grip'), function (g) { if (g.parentElement.contains(ev.target)) tx = ev.touches[0].clientX; }); }, { passive: true });
 document.addEventListener('touchend', function (ev) { if (tx === null) return; var dx = ev.changedTouches[0].clientX - tx; tx = null; if (Math.abs(dx) > 40) { askMin = !askMin; applyAsk(); } }, { passive: true });
 var pending = null;
-function ask2(what) { pending = what; $('modal').style.display = 'flex'; }
+function ask2(what) { pending = what; var m = $('modal'); m.style.display = 'flex'; m.classList.remove('on'); void m.offsetWidth; m.classList.add('on'); try { m.querySelector('button').focus({ preventScroll: true }); } catch (e) {} }
+function modalClose() { $('modal').style.display = 'none'; $('modal').classList.remove('on'); pending = null; }
 function modalDone(skip) {
-  $('modal').style.display = 'none'; var p = pending; pending = null;
-  if (PHONE) render($('phone'), skip ? 'WhatIs' : 'Role'); else if (skip) enter(true); else show(p);
+  var p = pending; modalClose();
+  if (PHONE) { if (skip) guest = true; go(skip ? 'WhatIs' : 'Role'); } else if (skip) enter(true); else show(p);
 }
+$('modal').addEventListener('click', function (ev) { if (ev.target === this) modalClose(); });
+document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && $('modal').style.display === 'flex') modalClose(); });
+function hideGuest() { $('guestbar').style.display = 'none'; fitPage($('page')); }
 function splash() {
+  var sp0 = $('splash'); sp0.style.display = 'flex'; sp0.style.opacity = 1; $('splashmark').style.opacity = 0;
+  var done = false, run = function () { if (done) return; done = true; $('splashmark').style.opacity = ''; splash2(); };
+  try { document.fonts.ready.then(run); } catch (e) { run(); } setTimeout(run, 1500);
+}
+function splash2() {
   var real = [].filter.call($('phone').querySelectorAll('span,h1,p,div'), function (e) { return e.children.length === 0 && /^(Khoj|کھوج)$/.test(e.textContent.trim()); })[0];
-  if (!real || !document.body.animate) return;
+  if (!real || !document.body.animate) { $('splash').style.display = 'none'; return; }
   var sp = $('splash'), m = $('splashmark'), cs = getComputedStyle(real); m.textContent = real.textContent; m.style.fontSize = cs.fontSize; m.style.lineHeight = cs.lineHeight; m.style.fontFamily = cs.fontFamily;
   sp.style.display = 'flex'; sp.style.opacity = 1;
   var a = m.getBoundingClientRect(), b = real.getBoundingClientRect(), dx = (b.left + b.width / 2) - (a.left + a.width / 2), dy = (b.top + b.height / 2) - (a.top + a.height / 2);
@@ -241,37 +264,53 @@ function render(el, name) {
   if (name === 'Home' && lang === 'ur') name = 'HomeUrdu';
   var p = PAGES[name]; if (!p) return false;
   try { window.speechSynthesis.cancel(); } catch (e) {}
-  el.classList.remove('fx'); el.innerHTML = p.b; void el.offsetWidth; if (FADE[name]) el.classList.add('fx'); el.setAttribute('data-name', name);
+  el.classList.remove('fx'); el.classList.remove('sw'); el.innerHTML = p.b; void el.offsetWidth; if (FADE[name]) el.classList.add('fx'); else if (el.id !== 'home' && !NOSW[name]) el.classList.add('sw'); el.setAttribute('data-name', name);
   if (name === 'Main' && lang === 'ur') { var lg = [].filter.call(el.querySelectorAll('a[href="#"]'), function (a) { var t = a.textContent.trim(); return t === 'English' || t === 'اردو'; }); if (lg.length === 2) { var s0 = lg[0].getAttribute('style'), s1 = lg[1].getAttribute('style'), keep = function (s, from) { return s.replace(/font-family:[^;]*;?/, '') + ';' + ((from.match(/font-family:[^;]*/) || [''])[0]); }; lg[0].setAttribute('style', keep(s1, s0)); lg[1].setAttribute('style', keep(s0, s1)); } } el.scrollTop = 0; if (el.id !== 'home') { S = {}; window.scrollTo(0, 0); } R();
-  if (el.id === 'page' && name === 'Path') { var road = el.querySelector('[style*="height: 420px"]'); if (road) road.outerHTML = WIDEPATH; }
+  if (el.id === 'page' && name === 'Path') { var road = el.querySelector('[style*="height: 420px"]'); if (road && el.clientWidth >= 480) road.outerHTML = WIDEPATH; fitRoad(el); }
   applyAsk(); if (el.id === 'home') fitHome(); else fitPage(el);
   if (name === 'VoiceMenu' || name === 'VoiceArrive') { el.style.position = 'relative'; var x = document.createElement('button'); x.setAttribute('aria-label', 'Close Ask Khoj'); x.textContent = '✕'; x.setAttribute('style', 'position:absolute;right:14px;top:14px;z-index:5;width:44px;height:44px;border:0;border-radius:22px;background:#fff;color:#33202A;font-size:16px;font-weight:800;box-shadow:0 4px 0 #E3B9C6'); x.setAttribute('onclick', 'closeVoice()'); el.appendChild(x); }
   if (name === 'VoiceMenu' || name === 'VoiceArrive') toast(lang === 'ur' ? 'اس سہولت پر کام جاری ہے۔ یہ اسکرین دکھاتی ہے کہ ’کھوج سے پوچھیں‘ کیسا ہوگا۔' : 'Feature in progress. This screen shows the vision for Ask Khoj.');
   if (lang === 'ur' && name !== 'HomeUrdu') { tr(el, true); el.setAttribute('data-ur', '1'); if (el.firstElementChild) { el.firstElementChild.setAttribute('dir', 'rtl'); el.firstElementChild.setAttribute('lang', 'ur'); } } else el.removeAttribute('data-ur');
-  if (guest && el.id === 'home') el.querySelectorAll('h1,span,p').forEach(function (e) { if (e.children.length === 0 && e.textContent.indexOf(', Esha') > -1) e.textContent = e.textContent.replace(', Esha', ''); });
+  if (guest && (el.id === 'home' || el.id === 'phone')) el.querySelectorAll('h1,span,p').forEach(function (e) { if (e.children.length === 0 && e.textContent.indexOf(', Esha') > -1) e.textContent = e.textContent.replace(', Esha', ''); });
   return true;
 }
 function copyCode(el) { var code = '455923'; try { navigator.clipboard.writeText(code).then(function () { toast('Code copied: ' + code); }, function () { toast('Game code: ' + code); }); } catch (e) { toast('Game code: ' + code); } }
-function closeVoice() { if (PHONE) render($('phone'), 'Home'); else closePane(); }
+function closeVoice() { if (PHONE) go('Home'); else closePane(); }
+function curP() { var d = $('phone').getAttribute('data-name'); return d === 'HomeUrdu' ? 'Home' : d; }
+function go(n) { if (render($('phone'), n)) { try { history.pushState({ p: curP() }, ''); } catch (e) {} } }
+window.addEventListener('popstate', function (ev) {
+  var st = ev.state || {};
+  if (PHONE) { render($('phone'), st.p || 'Main'); return; }
+  if ($('app').style.display !== 'block') return;
+  restoring = true;
+  var pn = st.pane || [];
+  if (!pn.length) closePane(); else { stack = pn.slice(0, -1); openPage(pn[pn.length - 1], false); }
+  restoring = false;
+});
 function show(id) { ['w-choose', 'w-login', 'w-signup'].forEach(function (x) { $(x).style.display = x === id ? 'flex' : 'none'; }); }
 function enter(asGuest) {
   guest = asGuest; try { sessionStorage.setItem('khoj', guest ? 'guest' : 'user'); } catch (e) {}
   $('welcome').style.display = 'none'; $('app').style.display = 'block';
   $('guestbar').style.display = guest ? 'flex' : 'none';
-  render($('home'), 'Home'); fitHome();
+  render($('home'), 'Home'); fitHome(); fitWidth();
 }
 function leave() { try { sessionStorage.removeItem('khoj'); } catch (e) {} closePane(); tuck(false); $('app').style.display = 'none'; $('welcome').style.display = 'flex'; show('w-signup'); }
-function tuck(on) { document.body.classList.toggle('tucked', on); }
-function closePane() { stack = []; $('pagewrap').style.display = 'none'; $('trail').style.display = 'none'; $('page').innerHTML = ''; }
+function tuck(on) { if (!on) autoTuck = false; document.body.classList.toggle('tucked', on); setTimeout(function () { fitPage($('page')); fitRoad($('page')); }, 470); }
+function closePane() { var had = stack.length; stack = []; $('pagewrap').style.display = 'none'; $('trail').style.display = 'none'; $('page').innerHTML = ''; $('page').removeAttribute('data-name'); navOn(); if (had) remember(); }
 function openPage(name, reset) {
   if (!PAGES[name]) return;
   if (reset) stack = [];
   var i = stack.indexOf(name), grew = false;
   if (i > -1) stack.length = i + 1; else { stack.push(name); grew = true; }
   $('pagewrap').style.display = 'block'; $('pagewrap').classList.remove('in'); void $('pagewrap').offsetWidth; if (FADE[name]) $('pagewrap').classList.add('in');
-  render($('page'), name); draw(grew);
+  draw(grew); render($('page'), name); navOn(); remember();
 }
+function navOn() { var k = { Game: 1, Children: 2 }[stack[0]] || 0; [].forEach.call($('topbar').querySelectorAll('nav button'), function (b, i) { b.classList.toggle('on', i === k); }); }
+var restoring = false;
+function remember() { if (restoring || PHONE) return; try { history.pushState({ pane: stack.slice() }, ''); } catch (e) {} }
 document.addEventListener('click', function (ev) {
+  var dis = ev.target.closest && ev.target.closest('#home [aria-disabled="true"],#page [aria-disabled="true"],#phone [aria-disabled="true"]');
+  if (dis) { var box0 = dis.closest('#home,#page,#phone'), cb = box0.querySelector('button[onclick*="agreed"]'); toast(lang === 'ur' ? 'آگے بڑھنے کے لیے پہلے خانے پر نشان لگائیں۔' : 'Tick the box first to continue.'); if (cb) { cb.classList.remove('nudge'); void cb.offsetWidth; cb.classList.add('nudge'); } return; }
   var gp = ev.target.closest && ev.target.closest('.grip');
   if (gp) { ev.preventDefault(); ev.stopPropagation(); askMin = !askMin; applyAsk(); return; }
   var bt = ev.target.closest && ev.target.closest('button');
@@ -295,7 +334,7 @@ document.addEventListener('click', function (ev) {
     return;
   }
   var n = href.replace(/\.html.*$/, ''); if (!PAGES[n]) return;
-  if (box.id === 'phone') { if (box.getAttribute('data-name') === 'Main' && n === 'Role') { ask2('phone'); return; } if (n === 'HomeUrdu' || (n === 'Home' && box.getAttribute('data-name') === 'HomeUrdu')) { setLang(n === 'HomeUrdu' ? 'ur' : 'en'); return; } render(box, n); return; }
+  if (box.id === 'phone') { if (box.getAttribute('data-name') === 'Main' && n === 'Role') { ask2('phone'); return; } if (n === 'HomeUrdu' || (n === 'Home' && box.getAttribute('data-name') === 'HomeUrdu')) { setLang(n === 'HomeUrdu' ? 'ur' : 'en'); return; } go(n); return; }
   if (n === 'HomeUrdu' || (n === 'Home' && $('home').getAttribute('data-name') === 'HomeUrdu' && box.id === 'home')) { setLang(n === 'HomeUrdu' ? 'ur' : 'en'); return; }
   if (HOME.indexOf(n) > -1) { if (box.id === 'page') closePane(); render($('home'), n === 'HomeCollapsed' ? 'Home' : n); return; }
   openPage(n, box.id === 'home');
@@ -315,8 +354,9 @@ $('trail').addEventListener('click', function (ev) {
   var a = ev.target.closest('[data-i]'); if (!a) return; ev.preventDefault();
   openPage(stack[+a.getAttribute('data-i')], false);
 });
-if (PHONE) { document.body.classList.add('phone'); $('welcome').style.display = 'none'; $('phone').style.display = 'block'; var hh = location.hash; if (hh.indexOf('#ur') === 0) { lang = 'ur'; shellLang(); } var pn = hh.replace(/^#(ur|en)-?/, ''); render($('phone'), PAGES[pn] ? pn : 'Main'); if (!hh) splash(); }
+if (PHONE) { document.body.classList.add('phone'); $('welcome').style.display = 'none'; $('phone').style.display = 'block'; var hh = location.hash; if (hh.indexOf('#ur') === 0) { lang = 'ur'; shellLang(); } var pn = hh.replace(/^#(ur|en)-?/, ''); render($('phone'), PAGES[pn] ? pn : 'Main'); try { history.replaceState({ p: curP() }, ''); } catch (e) {} if (!hh) splash(); }
 else {
+  try { history.replaceState({ pane: [] }, ''); } catch (e) {}
   try { var s0 = sessionStorage.getItem('khoj'); if (s0) enter(s0 === 'guest'); } catch (e) {}
   // walkthrough for checking: add #walk-guest-Path-Step2 to the address
   if (location.hash.indexOf('#walk-') === 0) { var q = location.hash.slice(6).split('-'); enter(q.shift() === 'guest'); q.forEach(function (n, k) { if (n === 'tuck') tuck(true); else if (n === 'ur') setLang('ur'); else openPage(n, k === 0); }); }
