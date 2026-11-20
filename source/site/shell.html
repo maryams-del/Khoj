@@ -88,7 +88,7 @@ body.tucked #pane{left:0}
 body.tucked #topbar,body.tucked #ask{display:flex}
 #page nav[aria-label="Main"],#page div:has(>span[title^="Swipe to tuck"]){display:none!important}
 .sw>*{animation:swin .28s ease both}
-@keyframes swin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes swin{from{opacity:0}to{opacity:1}}
 #modal.on{animation:modalin .2s ease both}#modal.on .box{animation:boxin .25s cubic-bezier(.2,.8,.2,1) both}
 @keyframes modalin{from{opacity:0}to{opacity:1}}
 @keyframes boxin{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
